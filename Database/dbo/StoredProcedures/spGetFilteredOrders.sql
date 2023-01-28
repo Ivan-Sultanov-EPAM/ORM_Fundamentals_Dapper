@@ -8,9 +8,9 @@ AS
 		SET NOCOUNT ON;
 
 		SELECT * FROM Orders
-		WHERE (@Year IS NULL OR YEAR(Orders.created_date) = @Year)
-		AND (@Month IS NULL OR Month(Orders.created_date) = @Month)
+		WHERE (@Year IS NULL OR YEAR(Orders.createdDate) = @Year)
+		AND (@Month IS NULL OR Month(Orders.createdDate) = @Month)
 		AND (@Status IS NULL OR Orders.status = @Status)
-		AND (@Product IS NULL OR Orders.product_id = @Product)
+		AND (@Product IS NULL OR Orders.productId = @Product)
 	END
 GO

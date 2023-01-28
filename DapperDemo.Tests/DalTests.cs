@@ -177,63 +177,63 @@ namespace DapperDemo.Tests
                         .Excluding(p => p.Id));
         }
 
-        //[Theory]
-        //[MemberData(nameof(GetFilteredOrdersTestData))]
-        //public void Should_Get_Filtered_Orders(
-        //    int? year,
-        //    int? month,
-        //    OrderStatus? status,
-        //    int? product,
-        //    List<Order> expected)
-        //{
-        //    AddProducts();
+        [Theory]
+        [MemberData(nameof(GetFilteredOrdersTestData))]
+        public void Should_Get_Filtered_Orders(
+            int? year,
+            int? month,
+            OrderStatus? status,
+            int? product,
+            List<Order> expected)
+        {
+            AddProducts();
 
-        //    Dal.AddOrder(DataSource.Orders[0]);
-        //    Dal.AddOrder(DataSource.Orders[1]);
-        //    Dal.AddOrder(DataSource.Orders[2]);
-        //    Dal.AddOrder(DataSource.Orders[3]);
+            Dal.AddOrder(DataSource.Orders[0]);
+            Dal.AddOrder(DataSource.Orders[1]);
+            Dal.AddOrder(DataSource.Orders[2]);
+            Dal.AddOrder(DataSource.Orders[3]);
 
-        //    var result = Dal.GetFilteredOrders(
-        //        year: year,
-        //        month: month,
-        //        status: status,
-        //        product: product
-        //        );
+            var result = Dal.GetFilteredOrders(
+                year: year,
+                month: month,
+                status: status,
+                product: product
+                );
 
-        //    result.Should()
-        //        .BeEquivalentTo(expected, config => config
-        //                 .Excluding(p => p.Id));
-        //}
+            result.Should()
+                .BeEquivalentTo(expected, config => config
+                         .Excluding(p => p.Id));
+        }
 
-        //[Theory]
-        //[MemberData(nameof(DeleteOrdersTestData))]
-        //public void Should_Delete_Orders(
-        //    int? year,
-        //    int? month,
-        //    OrderStatus? status,
-        //    int? product,
-        //    List<Order> expected)
-        //{
-        //    AddProducts();
+        [Theory]
+        [MemberData(nameof(DeleteOrdersTestData))]
+        public void Should_Delete_Orders(
+            int? year,
+            int? month,
+            OrderStatus? status,
+            int? product,
+            List<Order> expected)
+        {
+            AddProducts();
 
-        //    Dal.AddOrder(DataSource.Orders[0]);
-        //    Dal.AddOrder(DataSource.Orders[1]);
-        //    Dal.AddOrder(DataSource.Orders[2]);
-        //    Dal.AddOrder(DataSource.Orders[3]);
+            Dal.AddOrder(DataSource.Orders[0]);
+            Dal.AddOrder(DataSource.Orders[1]);
+            Dal.AddOrder(DataSource.Orders[2]);
+            Dal.AddOrder(DataSource.Orders[3]);
 
-        //    Dal.DeleteOrders(
-        //        year: year,
-        //        month: month,
-        //        status: status,
-        //        product: product
-        //    );
+            Dal.DeleteOrders(
+                year: year,
+                month: month,
+                status: status,
+                product: product
+            );
 
-        //    var result = Dal.GetAllOrders();
+            var result = Dal.GetAllOrders();
 
-        //    result.Should()
-        //        .BeEquivalentTo(expected, config => config
-        //            .Excluding(p => p.Id));
-        //}
+            result.Should()
+                .BeEquivalentTo(expected, config => config
+                    .Excluding(p => p.Id));
+        }
 
         private void AddProducts()
         {

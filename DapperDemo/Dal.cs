@@ -29,7 +29,7 @@ namespace DapperDemo
         {
             var sql = "SELECT * FROM products WHERE id = @id";
 
-            return _connection.Query<Product>(sql, new { id }).FirstOrDefault();
+            return _connection.QueryFirstOrDefault<Product>(sql, new { id });
         }
 
         public void UpdateProduct(Product product)
@@ -61,7 +61,7 @@ namespace DapperDemo
 
         public void AddOrder(Order order)
         {
-            var sql = "INSERT INTO orders (status, created_date, updated_date, product_id) values " +
+            var sql = "INSERT INTO orders (status, createdDate, updatedDate, productId) values " +
                       "(@Status, @CreatedDate, @UpdatedDate, @ProductId)";
 
             _connection.Execute(sql, order);
@@ -71,16 +71,16 @@ namespace DapperDemo
         {
             var sql = "SELECT * FROM orders WHERE id = @id";
 
-            return _connection.Query<Order>(sql, new { id }).FirstOrDefault();
+            return _connection.QueryFirstOrDefault<Order>(sql, new { id });
         }
 
         public void UpdateOrder(Order order)
         {
             var sql = "UPDATE orders SET " +
                       "status = @Status," +
-                      "created_date = @CreatedDate," +
-                      "updated_date = @UpdatedDate," +
-                      "product_id = @ProductId WHERE id = @Id";
+                      "createdDate = @CreatedDate," +
+                      "updatedDate = @UpdatedDate," +
+                      "productId = @ProductId WHERE id = @Id";
 
             _connection.Execute(sql, order);
         }
@@ -105,33 +105,15 @@ namespace DapperDemo
             OrderStatus? status = null,
             int? product = null)
         {
-            var orders = new List<Order>();
+            var sql = "spGetFilteredOrders";
 
-            using var cmd = new SqlCommand();
-            cmd.Connection = _connection;
-
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "spGetFilteredOrders";
-
-            cmd.Parameters.Add("@Year", SqlDbType.Int).Value = year;
-            cmd.Parameters.Add("@Month", SqlDbType.Int).Value = month;
-            cmd.Parameters.Add("@Status", SqlDbType.VarChar).Value = status;
-            cmd.Parameters.Add("@Product", SqlDbType.Int).Value = product;
-
-            var reader = cmd.ExecuteReader();
-
-            while (reader.Read())
-                orders.Add(new Order
-                {
-                    Id = reader["id"].ToInt(),
-                    Status = reader["status"].ToOrderStatus(),
-                    CreatedDate = reader["created_date"].ToDate(),
-                    UpdatedDate = reader["updated_date"].ToDate(),
-                    ProductId = reader["product_id"].ToInt()
-                });
-
-            reader.Close();
-            return orders;
+            return _connection.Query<Order>(sql, new
+            {
+                Year = year,
+                Month = month,
+                Status = status,
+                Product = product
+            }, commandType: CommandType.StoredProcedure).ToList();
         }
 
         public void DeleteOrders(
@@ -140,27 +122,22 @@ namespace DapperDemo
             OrderStatus? status = null,
             int? product = null)
         {
-            using var cmd = new SqlCommand();
-            cmd.Connection = _connection;
+            var sql = "spDeleteOrders";
 
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "spDeleteOrders";
-
-            cmd.Parameters.Add("@Year", SqlDbType.Int).Value = year;
-            cmd.Parameters.Add("@Month", SqlDbType.Int).Value = month;
-            cmd.Parameters.Add("@Status", SqlDbType.VarChar).Value = status;
-            cmd.Parameters.Add("@Product", SqlDbType.Int).Value = product;
-            
-            cmd.ExecuteNonQuery();
+            _connection.Execute(sql, new
+            {
+                Year = year,
+                Month = month,
+                Status = status,
+                Product = product
+            }, commandType: CommandType.StoredProcedure);
         }
 
         public void ClearAllData()
         {
-            using var cmd = new SqlCommand();
-            cmd.Connection = _connection;
+            var sql = "spClearDb";
 
-            cmd.CommandText = "EXEC spClearDb;";
-            cmd.ExecuteNonQuery();
+            _connection.Execute(sql, commandType: CommandType.StoredProcedure);
         }
     }
 }

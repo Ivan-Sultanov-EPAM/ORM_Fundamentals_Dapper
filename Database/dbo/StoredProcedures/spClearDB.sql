@@ -12,6 +12,6 @@ AS
 
 	ALTER TABLE Orders
 	ADD CONSTRAINT FK_Orders_Products
-	FOREIGN KEY (product_id) REFERENCES Products(Id);
+	FOREIGN KEY (productId) REFERENCES Products(Id);
  END
 GO

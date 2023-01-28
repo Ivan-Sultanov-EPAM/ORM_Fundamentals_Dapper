@@ -1,4 +1,6 @@
-﻿namespace DapperDemo.Models
+﻿using System.Collections.Generic;
+
+namespace DapperDemo.Models
 {
     public class Product
     {
@@ -9,5 +11,6 @@
         public decimal Height { get; set; }
         public decimal Width { get; set; }
         public decimal Length { get; set; }
+        public ICollection<Order> Orders { get; set; }
     }
 }
