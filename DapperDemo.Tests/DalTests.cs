@@ -92,9 +92,7 @@ namespace DapperDemo.Tests
             var order = DataSource.Orders[0];
 
             Dal.AddOrder(order);
-
-            var result = Dal.GetAllOrders();
-
+            
             Dal.GetAllOrders().Should()
                 .BeEquivalentTo(new List<Order> { order },
                     config => config
